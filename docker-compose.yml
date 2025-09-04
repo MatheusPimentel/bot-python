@@ -1,9 +1,18 @@
 version: '3.8'
 
 services:
+  db:
+    image: postgres:15-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
   bot-api:
     build: .
-    # Esta linha lê o arquivo .env e passa as variáveis para dentro do contêiner
     env_file:
       - .env
     ports:
@@ -11,3 +20,12 @@ services:
     volumes:
       - .:/app
     command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    # A diretiva "depends_on" garante que o contêiner do banco de dados (db)
+    # será iniciado ANTES do contêiner do nosso bot. Isso evita que o bot
+    # falhe ao tentar se conectar a um banco que ainda não está no ar.
+    depends_on:
+      - db
+
+# Declaração do volume nomeado que definimos para o serviço 'db'
+volumes:
+  postgres_data:
