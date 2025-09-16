@@ -23,3 +23,10 @@ async def create_db_and_tables():
     # Esta função cria a tabela no banco de dados se ela não existir
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+
+async def get_db():
+    """
+    Função de dependência que cria e fecha uma sessão de banco de dados por requisição.
+    """
+    async with AsyncSessionLocal() as session:
+        yield session

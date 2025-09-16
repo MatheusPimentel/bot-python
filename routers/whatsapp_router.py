@@ -3,6 +3,9 @@ import os
 
 from core.logic import process_message
 from adapters.whatsapp_adapter import send_message
+from fastapi import Depends
+from sqlalchemy.ext.asyncio import AsyncSession
+from database.database import get_db
 
 router = APIRouter()
 
@@ -21,7 +24,7 @@ async def whatsapp_verify(request: Request):
 
 # Endpoint para receber mensagens (POST)
 @router.post("/webhook/whatsapp")
-async def whatsapp_webhook(request: Request):
+async def whatsapp_webhook(request: Request, db: AsyncSession = Depends(get_db)):
     data = await request.json()
     print(f"Webhook do WhatsApp recebido: {data}")  # Log para vermos o JSON completo
 
@@ -37,10 +40,9 @@ async def whatsapp_webhook(request: Request):
                             sender_id = message_data["from"]
                             message_text = message_data["text"]["body"]
 
-                            # 1. Chama a MESMA lógica central
-                            response_text = process_message(user_id=sender_id, message_text=message_text)
+                            # Passamos a sessão 'db' para a função de lógica
+                            response_text = await process_message(db=db, user_id=sender_id, message_text=message_text)
 
-                            # 2. Usa o NOVO adaptador para enviar a resposta
                             if response_text:
                                 send_message(recipient_number=sender_id, text=response_text)
     except Exception as e:

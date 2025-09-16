@@ -1,6 +1,9 @@
+# docker-compose.yml
+
 version: '3.8'
 
 services:
+  # Serviço do Banco de Dados PostgreSQL
   db:
     image: postgres:15-alpine
     volumes:
@@ -11,6 +14,14 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
+    # ---- ADIÇÃO IMPORTANTE AQUI ----
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Serviço da nossa API do Bot
   bot-api:
     build: .
     env_file:
@@ -20,12 +31,10 @@ services:
     volumes:
       - .:/app
     command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
-    # A diretiva "depends_on" garante que o contêiner do banco de dados (db)
-    # será iniciado ANTES do contêiner do nosso bot. Isso evita que o bot
-    # falhe ao tentar se conectar a um banco que ainda não está no ar.
+    # Agora, o depends_on vai esperar o healthcheck passar
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
-# Declaração do volume nomeado que definimos para o serviço 'db'
 volumes:
   postgres_data:
