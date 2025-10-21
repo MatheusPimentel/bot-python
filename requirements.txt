@@ -4,3 +4,4 @@ fastapi[all]
 requests
 sqlalchemy
 asyncpg
+spacy

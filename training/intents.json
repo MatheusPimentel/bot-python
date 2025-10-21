@@ -1,0 +1,77 @@
+{
+  "intents": [
+    {
+      "tag": "saudacao",
+      "patterns": [
+        "Oi",
+        "Olá",
+        "Opa",
+        "E aí",
+        "Tudo bem?",
+        "Tudo certo?",
+        "Bom dia",
+        "Boa tarde",
+        "Boa noite",
+        "Como vai?",
+        "Oi, tudo bom",
+        "Começar",
+        "Olá, boa noite",
+        "Oi, como vai você?"
+      ]
+    },
+    {
+      "tag": "despedida",
+      "patterns": [
+        "Tchau",
+        "Até mais",
+        "Adeus",
+        "Até logo",
+        "Fui",
+        "Falou",
+        "Abraço",
+        "Depois a gente se fala",
+        "Obrigado, tchau",
+        "Valeu, até mais"
+      ]
+    },
+    {
+      "tag": "fazer_pedido",
+      "patterns": [
+        "Quero fazer um pedido",
+        "gostaria de uma pizza",
+        "vê pra mim uma pizza",
+        "anota um pedido aí",
+        "/pedido",
+        "quero pedir",
+        "fazer pedido",
+        "Gostaria de pedir",
+        "Pode anotar um pedido?",
+        "Quero uma pizza"
+      ]
+    },
+    {
+      "tag": "cancelar",
+      "patterns": [
+        "quero cancelar",
+        "cancela isso",
+        "esquece",
+        "não quero mais",
+        "/cancelar",
+        "pode cancelar por favor",
+        "cancelar o pedido"
+      ]
+    },
+    {
+      "tag": "ajuda",
+      "patterns": [
+        "socorro",
+        "ajuda",
+        "o que você faz?",
+        "como funciona?",
+        "/ajuda",
+        "preciso de ajuda",
+        "pode me ajudar?"
+      ]
+    }
+  ]
+}
